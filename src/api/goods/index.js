@@ -1,7 +1,7 @@
 import { get } from "../index";
 
 const PATH = {
-  PRODUCT_LIST: "haiyang/product/",
+  PRODUCT_LIST: "haiyang/product",
 };
 const API = {
   getProductList(params) {

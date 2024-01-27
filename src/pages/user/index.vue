@@ -74,7 +74,7 @@ export default {
       };
       API.getUserList(params).then(res => {
         this.userTableData = res.records;
-        this.total = res.total;
+        this.total = res?.total;
       });
     },
   },

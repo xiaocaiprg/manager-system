@@ -8,6 +8,7 @@
         :prop="item.prop"
         :label="item.label"
         :width="item.width || 180"
+        :formatter="item.formatter"
       >
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
@@ -29,6 +30,12 @@
 
 <script>
 import API from "@/api/goods/index";
+const STATUS = {
+  0: "待审核",
+  1: "已通过",
+  2: "驳回",
+  3: "下架",
+};
 export default {
   name: "Goods-Page",
   data() {
@@ -75,6 +82,9 @@ export default {
         {
           label: "商品状态",
           prop: "status",
+          formatter: (row, column, cellValue) => {
+            return STATUS[cellValue];
+          },
         },
         {
           label: "分佣比例",

@@ -24,17 +24,50 @@
     </el-table>
     <el-pagination layout="prev, pager, next" :total="total" class="pagination">
     </el-pagination>
+    <el-dialog
+      v-if="curAgent && dialogVisible"
+      title="提示"
+      :visible="true"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <div class="add-box">
+        <span class="agent-item">代理商Id: {{ curAgent.agentId }}</span>
+        <span class="agent-item"> 代理商名称: {{ curAgent.agentName }}</span>
+        <div class="agent-item">
+          充值：
+          <el-input
+            clearable
+            size="small"
+            v-model="intergral"
+            :validate-event="true"
+            placeholder="请输入充值积分"
+            @input="onInput"
+          ></el-input>
+        </div>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onConfirm">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import API from "@/api/agent/index";
+import { mixins } from "../../lib/mixin";
 export default {
   name: "Agent-Page",
+  mixins: [mixins],
   data() {
     return {
       tableData: [],
       total: 0,
+      dialogVisible: false,
+      curAgent: null,
+      intergral: "",
     };
   },
   computed: {
@@ -46,7 +79,7 @@ export default {
         },
         {
           label: "名称",
-          prop: "userName",
+          prop: "agentName",
           width: 100,
         },
         {
@@ -73,6 +106,9 @@ export default {
         },
       ];
     },
+    isValidIntergral() {
+      return /^\d+$/.test(this.intergral);
+    },
   },
   created() {
     this.getAgentList();
@@ -85,11 +121,49 @@ export default {
       };
       API.getAgentList(params).then(res => {
         this.tableData = res.records;
-        this.total = res.total;
+        this.total = res?.total;
       });
     },
     addPrice(index, rows) {
-      console.log(index, rows);
+      this.dialogVisible = true;
+      this.curAgent = rows;
+    },
+    addIntergral() {
+      return this.getUserInfo().then(res => {
+        if (res) {
+          const params = {
+            superId: res.superId,
+            agentId: this.curAgent.agentId,
+            integral: this.intergral, //积分
+            integralType: 1, //1:管理员到代理 2：代理到用户
+          };
+          return API.addIntergral(params).then(res => {
+            return res;
+          });
+        }
+        return null;
+      });
+    },
+    onInput(value) {
+      this.intergral = value;
+    },
+    onConfirm() {
+      if (this.isValidIntergral) {
+        this.addIntergral().then(res => {
+          if (res) {
+            this.$message.success("充值成功");
+            this.dialogVisible = false;
+          } else {
+            this.dialogVisible = false;
+            this.$message.error("充值失败，请联系管理员");
+          }
+        });
+      } else {
+        this.$message.error("请输入正确的数值");
+      }
+    },
+    handleClose() {
+      this.dialogVisible = false;
     },
   },
 };
@@ -102,6 +176,15 @@ export default {
   }
   .pagination {
     margin-top: 10px;
+  }
+  .add-box {
+    display: flex;
+    flex-direction: column;
+    .agent-item {
+      display: flex;
+      margin-top: 10px;
+      white-space: nowrap;
+    }
   }
 }
 </style>

@@ -29,7 +29,10 @@
     <div v-else style="height: 100%">
       <div class="header">
         <div class="header-logo">海洋国际管理后台</div>
-        <div class="user">用户名:{{ adminName }}</div>
+        <div class="heade-user">
+          <div class="user">用户名:{{ adminName }}</div>
+          <el-button round size="small" @click="onLoginOut">退出登录</el-button>
+        </div>
       </div>
       <div class="container">
         <div class="siderbar-aside">
@@ -110,7 +113,7 @@ export default {
     onLogin() {
       if (this.username === "" || this.password === "")
         return this.$message.warning("请先登录");
-      API.adminlogin({ userName: this.username, passWord: this.password }).then(
+      API.adminLogin({ userName: this.username, passWord: this.password }).then(
         res => {
           if (res) {
             this.$message.success("登录成功");
@@ -123,6 +126,7 @@ export default {
       );
     },
     handleClose() {},
+    onLoginOut() {},
   },
 };
 </script>
@@ -133,6 +137,7 @@ export default {
   font-size: 30px;
   color: #221e6a;
 }
+
 .not-login {
   display: flex;
   flex-direction: column;
@@ -159,6 +164,13 @@ export default {
   cursor: pointer;
   box-shadow: 0 2px 6px 0 rgba(182, 195, 217, 0.26);
   height: 8%;
+  .heade-user {
+    display: flex;
+    align-items: center;
+    .user {
+      margin-right: 10px;
+    }
+  }
 }
 .container {
   display: flex;
