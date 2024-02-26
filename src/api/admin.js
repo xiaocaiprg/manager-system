@@ -1,12 +1,13 @@
-import { post } from "./index";
+import http from "./index";
 
 const PATH = {
   LOGIN: "haiyang/admin/login",
-  LOGIN_OUT: "/haiyang/admin/loginout",
+  LOGIN_OUT: "haiyang/admin/loginout",
 };
 const API = {
   adminLogin(params) {
-    return post(PATH.LOGIN, params)
+    return http
+      .loginPost(PATH.LOGIN, params)
       .then(res => {
         if (res.code === 200) {
           return res.success;
@@ -17,7 +18,8 @@ const API = {
       });
   },
   adminLoginOut() {
-    return post(PATH.LOGIN_OUT)
+    return http
+      .post(PATH.LOGIN_OUT)
       .then(res => {
         if (res.code === 200) {
           return res.success;

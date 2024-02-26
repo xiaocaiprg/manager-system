@@ -2,28 +2,41 @@
   <div class="user-page">
     <h2>用户管理</h2>
     <el-table class="table" :data="userTableData" style="width: 100%">
+      <el-table-column type="index" width="40"> </el-table-column>
       <el-table-column
         v-for="(item, index) in userInfo"
         :key="index"
         :prop="item.prop"
         :label="item.label"
         :width="item.width || 180"
+        show-overflow-tooltip
       >
       </el-table-column>
     </el-table>
-    <el-pagination layout="prev, pager, next" :total="total" class="pagination">
+    <el-pagination
+      layout="total, prev, pager, next"
+      :page-size.sync="queryData.pageSize"
+      :total="total"
+      :current-page.sync="queryData.pageNum"
+      @current-change="getUserList()"
+      class="pagination"
+    >
     </el-pagination>
   </div>
 </template>
 
 <script>
-import API from "@/api/user/index";
+import API from "@/api/user";
 export default {
   name: "User-Page",
   data() {
     return {
       userTableData: [],
       total: 0,
+      queryData: {
+        pageNum: 1,
+        pageSize: 10,
+      },
     };
   },
   computed: {
@@ -34,8 +47,8 @@ export default {
           prop: "userId",
         },
         {
-          label: "名称",
-          prop: "userName",
+          label: "用户名",
+          prop: "username",
           width: 100,
         },
         {
@@ -57,8 +70,8 @@ export default {
           prop: "createTime",
         },
         {
-          label: "邀请码",
-          prop: "inviteCode",
+          label: "用户来源",
+          prop: "agentName",
         },
       ];
     },
@@ -68,11 +81,7 @@ export default {
   },
   methods: {
     getUserList() {
-      const params = {
-        pageNum: 1,
-        pageSize: 10,
-      };
-      API.getUserList(params).then(res => {
+      API.getUserList(this.queryData).then(res => {
         this.userTableData = res.records;
         this.total = res?.total;
       });

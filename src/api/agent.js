@@ -1,4 +1,4 @@
-import { get, post } from "../index";
+import http from "./index";
 
 const PATH = {
   AGENT_LIST: "haiyang/agent/list",
@@ -6,7 +6,8 @@ const PATH = {
 };
 const API = {
   getAgentList(params) {
-    return get(PATH.AGENT_LIST, params)
+    return http
+      .get(PATH.AGENT_LIST, params)
       .then(res => {
         if (res.code === 200) {
           return res.result;
@@ -17,7 +18,8 @@ const API = {
       });
   },
   addIntergral(params) {
-    return post(PATH.ADD_INTERGRAL, params)
+    return http
+      .post(PATH.ADD_INTERGRAL, params)
       .then(res => {
         if (res.code === 200) {
           return res.success;

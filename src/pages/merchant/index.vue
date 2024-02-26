@@ -3,12 +3,14 @@
     <h2>商家管理</h2>
 
     <el-table class="table" :data="merchantTableData" style="width: 100%">
+      <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column
         v-for="(item, index) in merchantInfo"
         :key="index"
         :prop="item.prop"
         :label="item.label"
         :width="item.width || 180"
+        show-overflow-tooltip
       >
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
@@ -23,31 +25,38 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination layout="prev, pager, next" :total="total" class="pagination">
+    <el-pagination
+      layout="total, prev, pager, next"
+      :page-size.sync="queryData.pageSize"
+      :total="total"
+      :current-page.sync="queryData.pageNum"
+      @current-change="getMerchantList()"
+      class="pagination"
+    >
     </el-pagination>
   </div>
 </template>
 
 <script>
-import API from "@/api/merchant/index";
+import API from "@/api/merchant";
 export default {
   name: "Merchant-Page",
   data() {
     return {
       merchantTableData: [],
       total: 0,
+      queryData: {
+        pageNum: 1,
+        pageSize: 10,
+      },
     };
   },
   computed: {
     merchantInfo() {
       return [
         {
-          label: "服务商ID",
-          prop: "merchantId",
-        },
-        {
           label: "服务商名称",
-          prop: "merchantName",
+          prop: "merchantname",
           width: 100,
         },
         {
@@ -56,9 +65,24 @@ export default {
           width: 100,
         },
         {
-          label: "所获积分",
+          label: "可使用积分",
           prop: "integral",
           width: 100,
+        },
+        {
+          label: "已使用积分",
+          prop: "usedIntegral",
+          width: 100,
+        },
+        {
+          label: "已获得总积分",
+          prop: "totalIntegral",
+          width: 110,
+        },
+        {
+          label: "联系方式",
+          prop: "phone",
+          width: 110,
         },
         {
           label: "创建时间",
@@ -85,11 +109,7 @@ export default {
   },
   methods: {
     getMerchantList() {
-      const params = {
-        pageNum: 1,
-        pageSize: 10,
-      };
-      API.getMerchantList(params).then(res => {
+      API.getMerchantList(this.queryData).then(res => {
         this.merchantTableData = res?.records;
         this.total = res?.total;
       });

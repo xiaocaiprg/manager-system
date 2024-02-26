@@ -20,6 +20,7 @@ const routes = [
 const router = new Router({
   routes, // (缩写) 相当于 routes: rosutes
   mode: "history",
+  base: "/admin/",
 });
 
 export default router;

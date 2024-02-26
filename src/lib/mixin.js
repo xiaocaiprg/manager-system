@@ -1,21 +1,22 @@
-import { get } from "../api/index";
+import http from "../api/index";
 const PATH = {
-  GET_USER_INFO: "haiyang/admin/token",
+  GET_ADMIN_INFO: "haiyang/admin/token",
 };
 export const mixins = {
   mounted() {},
   methods: {
-    getCookie(name) {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) {
-        return parts.pop().split(";").shift();
-      }
+    getLocalStorage() {
+      const authorization = window.localStorage.getItem("g-authorization");
+      return authorization;
     },
-    getUserInfo() {
-      const token = this.getCookie("token") || "";
-      if (token) {
-        return get(`${PATH.GET_USER_INFO}/${token}`)
+    setLocalStorage(value) {
+      window.localStorage.setItem("g-authorization", value);
+    },
+    getAdminInfo() {
+      const authorization = this.getLocalStorage() || "";
+      if (authorization) {
+        return http
+          .get(`${PATH.GET_ADMIN_INFO}`)
           .then(res => {
             if (res.code === 200) {
               return res.result;

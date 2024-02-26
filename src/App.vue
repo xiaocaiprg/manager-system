@@ -100,14 +100,15 @@ export default {
   },
   components: {},
   created() {
-    this.getUserInfo().then(res => {
+    this.getAdminInfo().then(res => {
       if (res) {
-        this.adminName = res.userName;
+        this.adminName = res.username;
         this.isLogin = true;
       } else {
         this.isLogin = false;
       }
     });
+    this.activeIndex = this.$route.path;
   },
   methods: {
     onLogin() {
@@ -118,7 +119,7 @@ export default {
           if (res) {
             this.$message.success("登录成功");
             this.isLogin = true;
-            this.adminName = res.userName;
+            this.adminName = res.username;
           } else {
             this.$message.error("登录失败");
           }
@@ -181,6 +182,9 @@ export default {
   }
   .siderbar-main {
     padding: 20px;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
   }
 }
 </style>

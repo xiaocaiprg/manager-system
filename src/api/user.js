@@ -1,11 +1,12 @@
-import { get } from "../index";
+import http from "./index";
 
 const PATH = {
-  PRODUCT_LIST: "haiyang/product",
+  USER_LIST: "haiyang/user/list",
 };
 const API = {
-  getProductList(params) {
-    return get(PATH.PRODUCT_LIST, params)
+  getUserList(params) {
+    return http
+      .get(PATH.USER_LIST, params)
       .then(res => {
         if (res.code === 200) {
           return res.result;

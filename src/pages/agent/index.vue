@@ -2,6 +2,7 @@
   <div class="agent-page">
     <h2>代理商管理</h2>
     <el-table class="table" :data="tableData" style="width: 100%">
+      <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column
         v-for="(item, index) in agentInfo"
         :key="index"
@@ -14,7 +15,7 @@
         <template slot-scope="scope">
           <el-button
             @click.native.prevent="addPrice(scope.$index, scope.row)"
-            type="text"
+            type="primary"
             size="small"
           >
             充值积分
@@ -56,7 +57,7 @@
 </template>
 
 <script>
-import API from "@/api/agent/index";
+import API from "@/api/agent";
 import { mixins } from "../../lib/mixin";
 export default {
   name: "Agent-Page",
@@ -79,11 +80,11 @@ export default {
         },
         {
           label: "名称",
-          prop: "agentName",
+          prop: "agentname",
           width: 100,
         },
         {
-          label: "待使用积分",
+          label: "可使用积分",
           prop: "integral",
           width: 100,
         },
@@ -93,8 +94,14 @@ export default {
           width: 100,
         },
         {
+          label: "已获得总积分",
+          prop: "totalIntegral",
+          width: 110,
+        },
+        {
           label: "联系方式",
           prop: "phone",
+          width: 110,
         },
         {
           label: "加入时间",
@@ -129,7 +136,7 @@ export default {
       this.curAgent = rows;
     },
     addIntergral() {
-      return this.getUserInfo().then(res => {
+      return this.getAdminInfo().then(res => {
         if (res) {
           const params = {
             superId: res.superId,
@@ -153,6 +160,7 @@ export default {
           if (res) {
             this.$message.success("充值成功");
             this.dialogVisible = false;
+            this.getAgentList();
           } else {
             this.dialogVisible = false;
             this.$message.error("充值失败，请联系管理员");
