@@ -1,6 +1,6 @@
 <template>
-  <div class="merchant-page">
-    <h2>商家管理</h2>
+  <div class="game-page">
+    <h2>挑战管理</h2>
 
     <el-table class="table" :data="merchantTableData" style="width: 100%">
       <el-table-column type="index" width="50"> </el-table-column>
@@ -40,7 +40,7 @@
 <script>
 import API from "@/api/merchant";
 export default {
-  name: "Merchant-Page",
+  name: "Game-Page",
   data() {
     return {
       merchantTableData: [],

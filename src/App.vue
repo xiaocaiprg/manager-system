@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div v-if="!isLogin" class="not-login">
-      <div class="header-logo">海洋国际管理后台</div>
+      <div class="header-logo">俊龙娱乐管理后台</div>
       <h2>请登录</h2>
       <div class="login-card">
         <div class="login-item">
@@ -28,7 +28,10 @@
     </div>
     <div v-else style="height: 100%">
       <div class="header">
-        <div class="header-logo">海洋国际管理后台</div>
+        <div class="header-logo">
+          <img class="logo" src="./assets/logo.png" alt="俊龙娱乐" />
+          俊龙娱乐管理后台
+        </div>
         <div class="heade-user">
           <div class="user">用户名:{{ adminName }}</div>
           <el-button round size="small" @click="onLoginOut">退出登录</el-button>
@@ -71,19 +74,14 @@ export default {
       adminName: "",
       menuList: [
         {
-          name: "商家管理",
+          name: "挑战管理",
           path: "/",
           icon: "el-icon-menu",
         },
         {
-          name: "商品管理",
-          path: "/goods",
+          name: "积分管理",
+          path: "/points",
           icon: "el-icon-goods",
-        },
-        {
-          name: "代理管理",
-          path: "/agent",
-          icon: "el-icon-bangzhu",
         },
         {
           name: "用户管理",
@@ -100,14 +98,14 @@ export default {
   },
   components: {},
   created() {
-    this.getAdminInfo().then(res => {
-      if (res) {
-        this.adminName = res.username;
-        this.isLogin = true;
-      } else {
-        this.isLogin = false;
-      }
-    });
+    // this.getAdminInfo().then(res => {
+    //   if (res) {
+    //     this.adminName = res.username;
+    //     this.isLogin = true;
+    //   } else {
+    //     this.isLogin = false;
+    //   }
+    // });
     this.activeIndex = this.$route.path;
   },
   methods: {
@@ -133,10 +131,17 @@ export default {
 </script>
 <style lang="less" scoped>
 .header-logo {
+  display: flex;
+  align-items: center;
   font-weight: 700;
   font-family: DINAlternate-Bold;
   font-size: 30px;
   color: #221e6a;
+  .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
 }
 
 .not-login {

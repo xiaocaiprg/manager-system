@@ -1,6 +1,6 @@
 <template>
   <div class="goods-page">
-    <h2>商品管理</h2>
+    <h2>积分管理</h2>
     <el-table class="table" :data="goodsTableData" style="width: 100%">
       <el-table-column type="index" width="50"> </el-table-column>
       <el-table-column
@@ -98,7 +98,7 @@ import { ProductStatusEnum, ProductStatus } from "@/lib/config.ts";
 import API from "@/api/goods";
 
 export default {
-  name: "Goods-Page",
+  name: "Points-Page",
   data() {
     return {
       goodsTableData: [],
